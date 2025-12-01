@@ -22,11 +22,10 @@ data:
           - sh
           - "-c"
           - |
-            export VAULT_ADDR=http://vault.default.svc.cluster.local:8200
-            export VAULT_TOKEN=root
             for file in $(find . -name '*.yaml'); do
               if grep -q "sops:" "$file" 2>/dev/null; then
-                sops -d "$file"
+                # Replace 127.0.0.1 with cluster address in SOPS metadata during decryption
+                sed 's|http://127.0.0.1:8200|http://vault.default.svc.cluster.local:8200|g' "$file" | sops -d /dev/stdin
               else
                 cat "$file"
               fi
