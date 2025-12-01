@@ -15,7 +15,11 @@ data:
         command: ["sh", "-c"]
         args:
           - |
-            for f in $(find . -name '*.yaml'); do
-              sops -d "$f" 2>/dev/null || cat "$f"
+            for f in $(find . -name '*.yaml' -o -name '*.yml'); do
+              if grep -q "sops:" "$f" && grep -q "age:" "$f"; then
+                sops -d "$f" 2>/dev/null || cat "$f"
+              else
+                cat "$f"
+              fi
               echo '---'
             done
