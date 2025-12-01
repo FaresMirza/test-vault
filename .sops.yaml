@@ -1,0 +1,4 @@
+creation_rules:
+  - path_regex: \.yaml$
+    encrypted_regex: '^(data|stringData)$'
+    hc_vault_transit_uri: "http://127.0.0.1:8200/v1/transit/keys/sops-key"
