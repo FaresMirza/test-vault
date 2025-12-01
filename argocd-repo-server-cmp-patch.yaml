@@ -1,0 +1,59 @@
+spec:
+  template:
+    spec:
+      volumes:
+      - name: custom-tools
+        emptyDir: {}
+      - name: cmp-plugin
+        configMap:
+          name: cmp-plugin
+      - name: sops-age
+        secret:
+          secretName: sops-age
+      initContainers:
+      - name: install-sops
+        image: alpine:3.20
+        command: ["/bin/sh", "-c"]
+        args:
+        - |
+          apk add --no-cache curl && \
+          curl -L https://github.com/getsops/sops/releases/latest/download/sops-linux-amd64 -o /custom-tools/sops && \
+          chmod +x /custom-tools/sops
+        volumeMounts:
+        - name: custom-tools
+          mountPath: /custom-tools
+      containers:
+      - name: argocd-repo-server
+        image: quay.io/argoproj/argocd:v3.2.1
+        volumeMounts:
+        - name: custom-tools
+          mountPath: /usr/local/bin/sops
+          subPath: sops
+        - name: sops-age
+          mountPath: /deploy
+          readOnly: true
+      - name: sops-plugin
+        image: quay.io/argoproj/argocd:v3.2.1
+        command: [/var/run/argocd/argocd-cmp-server]
+        env:
+        - name: SOPS_AGE_KEY_FILE
+          value: /deploy/age.agekey
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 999
+        volumeMounts:
+        - name: var-files
+          mountPath: /var/run/argocd
+        - name: plugins
+          mountPath: /home/argocd/cmp-server/plugins
+        - name: tmp
+          mountPath: /tmp
+        - name: cmp-plugin
+          mountPath: /home/argocd/cmp-server/config/plugin.yaml
+          subPath: plugin.yaml
+        - name: custom-tools
+          mountPath: /usr/local/bin/sops
+          subPath: sops
+        - name: sops-age
+          mountPath: /deploy
+          readOnly: true

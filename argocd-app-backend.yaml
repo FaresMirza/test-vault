@@ -10,7 +10,7 @@ spec:
     path: .
     targetRevision: main
     plugin:
-      name: sops
+      name: sops-v1.0
       env:
         - name: SOPS_AGE_KEY_FILE
           value: /deploy/age.agekey
