@@ -1,0 +1,13 @@
+spec:
+  template:
+    spec:
+      volumes:
+      - name: sops-age
+        secret:
+          secretName: sops-age
+      containers:
+      - name: argocd-repo-server
+        volumeMounts:
+        - name: sops-age
+          mountPath: /deploy
+          readOnly: true

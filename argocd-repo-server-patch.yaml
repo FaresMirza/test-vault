@@ -1,0 +1,25 @@
+spec:
+  template:
+    spec:
+      volumes:
+      - name: custom-tools
+        emptyDir: {}
+      initContainers:
+      - name: install-sops
+        image: alpine:3.20
+        command: ["/bin/sh", "-c"]
+        args:
+        - |
+          apk add --no-cache curl && \
+          curl -L https://github.com/getsops/sops/releases/latest/download/sops-linux-amd64 -o /custom-tools/sops && \
+          chmod +x /custom-tools/sops
+        volumeMounts:
+        - name: custom-tools
+          mountPath: /custom-tools
+      containers:
+      - name: argocd-repo-server
+        image: quay.io/argoproj/argocd:v3.2.1
+        volumeMounts:
+        - name: custom-tools
+          mountPath: /usr/local/bin/sops
+          subPath: sops
