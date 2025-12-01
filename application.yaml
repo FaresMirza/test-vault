@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: sops-demo
+  namespace: argocd
+spec:
+  destination:
+    namespace: default
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    repoURL: https://github.com/FaresMirza/test-vault
+    targetRevision: main
+    path: .
+    plugin:
+      name: sops-vault
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
