@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cmp-plugin
+  namespace: argocd
+data:
+  plugin.yaml: |
+    apiVersion: argoproj.io/v1alpha1
+    kind: ConfigManagementPlugin
+    metadata:
+      name: sops-vault
+    spec:
+      version: v1.0
+      discover:
+        find:
+          command:
+            - sh
+            - "-c"
+            - "find . -name '*.yaml' -exec grep -l 'sops:' {} \\;"
+      generate:
+        command:
+          - sh
+          - "-c"
+          - |
+            export VAULT_ADDR=http://vault.default.svc.cluster.local:8200
+            export VAULT_TOKEN=root
+            for file in $(find . -name '*.yaml'); do
+              if grep -q "sops:" "$file" 2>/dev/null; then
+                sops -d "$file"
+              else
+                cat "$file"
+              fi
+            done
