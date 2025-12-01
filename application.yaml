@@ -12,8 +12,6 @@ spec:
     repoURL: https://github.com/FaresMirza/test-vault
     targetRevision: main
     path: .
-    plugin:
-      name: sops-vault
   syncPolicy:
     automated:
       prune: true
