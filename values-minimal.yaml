@@ -22,9 +22,9 @@ repoServer:
     - name: HELM_SECRETS_HELM_PATH
       value: /usr/local/bin/helm
     
-    # Vault authentication for SOPS
+    # Vault authentication for SOPS - Now using ngrok public URL
     - name: VAULT_ADDR
-      value: http://vault.vault.svc.cluster.local:8200
+      value: https://scapiform-nonvaluable-violette.ngrok-free.dev
     - name: VAULT_TOKEN
       value: root
 

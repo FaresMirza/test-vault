@@ -1,0 +1,7 @@
+# SOPS configuration file
+# Vault is now accessible via ngrok - anyone on the internet can encrypt/decrypt!
+
+creation_rules:
+  # Rule for secrets.yaml
+  - path_regex: secrets\.yaml$
+    hc_vault_transit_uri: "https://scapiform-nonvaluable-violette.ngrok-free.dev/v1/transit/keys/sops-key"
