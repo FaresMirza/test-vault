@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: argocd-repo-server
+  namespace: argocd
+spec:
+  template:
+    spec:
+      containers:
+      - name: sops
+        image: mozilla/sops:v3.8.1
+        command: ["/var/run/argocd/argocd-cmp-server"]
+        env:
+        - name: VAULT_ADDR
+          value: "http://vault.vault:8200"
+        - name: VAULT_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: vault-token
+              key: token
+        volumeMounts:
+        - mountPath: /var/run/argocd
+          name: var-files
+        - mountPath: /home/argocd/cmp-server/plugins
+          name: plugins
+        - mountPath: /home/argocd/cmp-server/config/plugin.yaml
+          subPath: plugin.yaml
+          name: argocd-cmp-sops
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 999
+      volumes:
+      - configMap:
+          name: argocd-cmp-sops
+        name: argocd-cmp-sops
