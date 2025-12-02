@@ -1,0 +1,11 @@
+# Vault sensitive files
+vault-init.json
+vault-init.json.gpg
+
+# SOPS temporary/backup files  
+secrets-*.yaml
+*-unencrypted.yaml
+
+# Helm temporary files
+*.tgz
+charts/
