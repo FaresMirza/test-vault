@@ -12,6 +12,10 @@ spec:
     repoURL: https://github.com/FaresMirza/test-vault
     targetRevision: main
     path: .
+    helm:
+      # Enable helm-secrets to decrypt SOPS files
+      valueFiles:
+        - secrets://secrets.yaml
   syncPolicy:
     automated:
       prune: true
