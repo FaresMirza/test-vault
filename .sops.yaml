@@ -1,3 +1,0 @@
-creation_rules:
-  - path_regex: secret\.yaml$
-    hc_vault_transit_uri: "http://vault.vault:8200/v1/transit/keys/sops-key"
