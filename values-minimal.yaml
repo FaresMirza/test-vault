@@ -23,10 +23,6 @@ repoServer:
       value: /usr/local/bin/helm
     
     # Vault authentication for SOPS - Now using ngrok public URL
-    - name: VAULT_ADDR
-      value: https://scapiform-nonvaluable-violette.ngrok-free.dev
-    - name: VAULT_TOKEN
-      value: root
 
   # Install SOPS and helm-secrets
   initContainers:
