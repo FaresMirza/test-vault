@@ -1,7 +1,7 @@
 # SOPS configuration file
-# Vault is now accessible via ngrok - anyone on the internet can encrypt/decrypt!
+# Using Azure Key Vault for encryption/decryption
 
 creation_rules:
-  # Rule for secrets.yaml
-  - path_regex: secrets\.yaml$
-    hc_vault_transit_uri: "https://scapiform-nonvaluable-violette.ngrok-free.dev/v1/transit/keys/sops-key"
+  # Rule for all YAML files including values-minimal.yaml
+  - path_regex: \.yaml$
+    azure_keyvault: 'https://inpro.vault.azure.net/keys/sops-shared/ef90dcdfcd0e47489cd0833d3ccff11b'
