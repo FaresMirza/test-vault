@@ -1,6 +1,7 @@
 # Vault sensitive files
 vault-init.json
 vault-init.json.gpg
+values-minimal.yaml
 
 # SOPS temporary/backup files  
 secrets-*.yaml
